@@ -1,4 +1,6 @@
 const implementItem = document.querySelector('.items');
+const olCart = document.querySelector('ol.cart__items');
+let totalPrice = 0;
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -26,7 +28,7 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// Função para pegar resultado do fetch
+// Função para implementar os produtos na section items
 const resultadoProdutos = async () => {
   const resultadoFetch = await fetchProducts('computador');
   resultadoFetch.results.forEach((elementoCorr) => {
@@ -54,7 +56,26 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+// Função destinada a criação dos elementos do carrinho de compras
+const addItemCart = async (event) => {
+  const sku = getSkuFromProductItem(event.target.parentElement);
+  const data = await fetchItem(sku);
+  console.log(data);
+  const obgItem = {
+    sku: data.id,
+    name: data.title,
+    salePrice: data.price,
+  };
+  olCart.appendChild(createCartItemElement(obgItem));
+};
 
-window.onload = () => { 
-  resultadoProdutos();
+window.onload = async () => { 
+  await resultadoProdutos();
+  
+// Implementação do escutador do botão adicionar ao carrinho
+  const addButton = document.querySelectorAll('.item__add');
+  addButton.forEach((butao) => {
+    butao
+      .addEventListener('click', addItemCart);
+  });
 };
