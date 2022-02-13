@@ -1,5 +1,19 @@
 const implementItem = document.querySelector('.items');
 const olCart = document.querySelector('ol.cart__items');
+const esvaziarCArt = document.querySelector('.empty-cart'); 
+let totalPrice = 0;
+
+// Funções destinadas para Implementar o preço e retirar o preço
+
+const addPrice = (item) => {
+  totalPrice += item.salePrice;
+  console.log(totalPrice);
+  return totalPrice;
+};
+
+const minusPrice = () => {
+  totalPrice -= 'itemRemovido';
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -45,8 +59,8 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
   olCart.removeChild(event.target);
+  console.log(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -60,14 +74,24 @@ function createCartItemElement({ sku, name, salePrice }) {
 const addItemCart = async (event) => {
   const sku = getSkuFromProductItem(event.target.parentElement);
   const data = await fetchItem(sku);
-  console.log(data);
   const obgItem = {
     sku: data.id,
     name: data.title,
     salePrice: data.price,
   };
   olCart.appendChild(createCartItemElement(obgItem));
+  addPrice(obgItem);
 };
+
+// Função destinada a esvaziar o carrinho de compras.
+const zeroCart = () => {
+  olCart.innerHTML = ' ';
+  totalPrice = 0;
+};
+
+// Botão para esvaziar o cart
+esvaziarCArt
+    .addEventListener('click', zeroCart);
 
 window.onload = async () => { 
   await resultadoProdutos();
@@ -78,4 +102,5 @@ window.onload = async () => {
     butao
       .addEventListener('click', addItemCart);
   });
+  
 };
