@@ -2,17 +2,28 @@ const implementItem = document.querySelector('.items');
 const olCart = document.querySelector('ol.cart__items');
 const esvaziarCArt = document.querySelector('.empty-cart'); 
 let totalPrice = 0;
+const cartSection = document.querySelector('.cart');
 
-// Funções destinadas para Implementar o preço e retirar o preço
-
+// Funções destinadas para atualizar o totalPrice
 const addPrice = (item) => {
   totalPrice += item.salePrice;
   console.log(totalPrice);
   return totalPrice;
 };
 
-const minusPrice = () => {
-  totalPrice -= 'itemRemovido';
+// Função para implementar o preço Total
+const addTotalPrice = () => {
+  const divPrice = document.createElement('div');
+  const textoPrice = document.createElement('span');
+  const valorPrice = document.createElement('span');
+
+  textoPrice.textContent = 'preço total: $ ';
+  valorPrice.textContent = totalPrice; 
+  valorPrice.className = 'total-price';
+  divPrice.appendChild(textoPrice);
+  divPrice.appendChild(valorPrice);
+  
+  cartSection.insertBefore(divPrice, esvaziarCArt);
 };
 
 function createProductImageElement(imageSource) {
@@ -81,6 +92,7 @@ const addItemCart = async (event) => {
   };
   olCart.appendChild(createCartItemElement(obgItem));
   addPrice(obgItem);
+  addTotalPrice();
 };
 
 // Função destinada a esvaziar o carrinho de compras.
@@ -102,5 +114,5 @@ window.onload = async () => {
     butao
       .addEventListener('click', addItemCart);
   });
-  
+  addTotalPrice();
 };
