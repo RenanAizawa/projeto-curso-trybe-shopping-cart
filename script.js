@@ -47,6 +47,8 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   // coloque seu código aqui
+  console.log(event.target);
+  olCart.removeChild(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
