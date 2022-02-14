@@ -96,6 +96,8 @@ const implementaSaveCart = async () => {
   olCart.innerHTML = getSavedCartItems();
 };
 
+// document.querySelector('ol.cart__items').addEventListener('click', cartItemClickListener);
+
 window.onload = async () => { 
   await resultadoProdutos();
   
@@ -106,5 +108,5 @@ window.onload = async () => {
       .addEventListener('click', addItemCart);
   });
   implementaSaveCart();
-  document.querySelector('ol.cart__items').addEventListener('click', cartItemClickListener);
+  // document.querySelector('ol.cart__items').addEventListener('click', cartItemClickListener);
 };
