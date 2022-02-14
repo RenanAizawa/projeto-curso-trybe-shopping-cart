@@ -43,12 +43,20 @@ const resultadoProdutos = async () => {
   });
 };
 
+// Função destinada a salvar o carrinho de compras no localStorege
+const saveCart = async () => {
+  const liCart = document.querySelector('.cart__items').innerHTML;
+  await saveCartItems(liCart);
+  console.log(liCart);
+};
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
 function cartItemClickListener(event) {
   olCart.removeChild(event.target);
+  saveCart();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -58,12 +66,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
-// Função destinada a salvar o carrinho de compras no localStorege
-const saveCart = async () => {
-  const liCart = document.querySelector('.cart__items').innerHTML;
-  await saveCartItems(liCart);
-  console.log(liCart);
-};
 
 // Função destinada a criação dos elementos no carrinho de compras
 const addItemCart = async (event) => {
@@ -93,6 +95,7 @@ esvaziarCArt
 const implementaSaveCart = async () => {
   olCart.innerHTML = getSavedCartItems();
 };
+
 window.onload = async () => { 
   await resultadoProdutos();
   
@@ -102,5 +105,6 @@ window.onload = async () => {
     butao
       .addEventListener('click', addItemCart);
   });
-  await implementaSaveCart(); 
+  implementaSaveCart();
+  document.querySelector('ol.cart__items').addEventListener('click', cartItemClickListener);
 };
