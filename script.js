@@ -1,30 +1,8 @@
+// const getSavedCartItems = require("./helpers/getSavedCartItems");
+
 const implementItem = document.querySelector('.items');
 const olCart = document.querySelector('ol.cart__items');
 const esvaziarCArt = document.querySelector('.empty-cart'); 
-let totalPrice = 0;
-const cartSection = document.querySelector('.cart');
-
-// Funções destinadas para atualizar o totalPrice
-const addPrice = (item) => {
-  totalPrice += item.salePrice;
-  console.log(totalPrice);
-  return totalPrice;
-};
-
-// Função para implementar o preço Total
-const addTotalPrice = () => {
-  const divPrice = document.createElement('div');
-  const textoPrice = document.createElement('span');
-  const valorPrice = document.createElement('span');
-
-  textoPrice.textContent = 'preço total: $ ';
-  valorPrice.textContent = totalPrice; 
-  valorPrice.className = 'total-price';
-  divPrice.appendChild(textoPrice);
-  divPrice.appendChild(valorPrice);
-  
-  cartSection.insertBefore(divPrice, esvaziarCArt);
-};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -71,7 +49,6 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   olCart.removeChild(event.target);
-  console.log(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -81,7 +58,14 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
-// Função destinada a criação dos elementos do carrinho de compras
+// Função destinada a salvar o carrinho de compras no localStorege
+const saveCart = async () => {
+  const liCart = document.querySelector('.cart__items').innerHTML;
+  await saveCartItems(liCart);
+  console.log(liCart);
+};
+
+// Função destinada a criação dos elementos no carrinho de compras
 const addItemCart = async (event) => {
   const sku = getSkuFromProductItem(event.target.parentElement);
   const data = await fetchItem(sku);
@@ -91,20 +75,24 @@ const addItemCart = async (event) => {
     salePrice: data.price,
   };
   olCart.appendChild(createCartItemElement(obgItem));
-  addPrice(obgItem);
-  addTotalPrice();
+  saveCart();
 };
 
 // Função destinada a esvaziar o carrinho de compras.
 const zeroCart = () => {
   olCart.innerHTML = ' ';
   totalPrice = 0;
+  saveCart();
 };
 
 // Botão para esvaziar o cart
 esvaziarCArt
     .addEventListener('click', zeroCart);
 
+// Função para colocar o cart salvo no ol
+const implementaSaveCart = async () => {
+  olCart.innerHTML = getSavedCartItems();
+};
 window.onload = async () => { 
   await resultadoProdutos();
   
@@ -114,5 +102,5 @@ window.onload = async () => {
     butao
       .addEventListener('click', addItemCart);
   });
-  addTotalPrice();
+  await implementaSaveCart(); 
 };
