@@ -3,6 +3,7 @@
 const implementItem = document.querySelector('.items');
 const olCart = document.querySelector('ol.cart__items');
 const esvaziarCArt = document.querySelector('.empty-cart'); 
+let totalPrice = 0;
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -30,6 +31,41 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+// Função dedidacada a adição de total-price
+const addTotalPrice = () => {
+  const addDiv = document.createElement('div');
+  const addTexto = document.createElement('span');
+  const addPrice = document.createElement('span');
+
+  addTexto.textContent = 'Preço total: ';
+  addPrice.innerText = totalPrice;
+  addPrice.className = 'total-price';
+  addDiv.appendChild(addTexto);
+  addDiv.appendChild(addPrice);
+
+  document.querySelector('.cart').insertBefore(addDiv, esvaziarCArt);
+};
+
+// Função destinada a atualizar o totalPrice
+const somaPrice = () => {
+  const price = document.querySelectorAll('.cart__item');
+  const arrayVazio = [];
+  const arrayPrice = [];
+  price.forEach((item) => {
+    arrayVazio.push(item.innerText.split('$'));
+  });
+  arrayVazio.forEach((itemArray) => {
+    arrayPrice.push(parseFloat(itemArray[1]));
+  });
+  console.log(totalPrice);
+  if (arrayPrice.length < 1) {
+    document.querySelector('.total-price').innerText = 0;
+  } else {
+    totalPrice = arrayPrice.reduce((acc, curr) => acc + curr);
+    document.querySelector('.total-price').innerText = totalPrice;
+  }
+};
+
 // Função para implementar os produtos na section items
 const resultadoProdutos = async () => {
   const resultadoFetch = await fetchProducts('computador');
@@ -56,6 +92,7 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   event.target.remove();
   saveCart();
+  somaPrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -77,6 +114,7 @@ const addItemCart = async (event) => {
   };
   olCart.appendChild(createCartItemElement(obgItem));
   saveCart();
+  somaPrice();
 };
 
 // Função destinada a esvaziar o carrinho de compras.
@@ -84,6 +122,7 @@ const zeroCart = () => {
   olCart.innerHTML = ' ';
   totalPrice = 0;
   saveCart();
+  somaPrice();
 };
 
 // Botão para esvaziar o cart
@@ -107,5 +146,5 @@ window.onload = async () => {
       .addEventListener('click', addItemCart);
   });
   implementaSaveCart();
-  // document.querySelector('ol.cart__items').addEventListener('click', cartItemClickListener);
+  addTotalPrice();
 };

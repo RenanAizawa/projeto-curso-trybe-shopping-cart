@@ -147,3 +147,10 @@ body {
   border: 2px solid rgb(5, 52, 219);
   background-color: rgb(249, 249, 246);
 }
+
+/* ADciciona a funcionalidade flex a div */
+div {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
