@@ -47,7 +47,6 @@ const resultadoProdutos = async () => {
 const saveCart = async () => {
   const liCart = document.querySelector('.cart__items').innerHTML;
   await saveCartItems(liCart);
-  console.log(liCart);
 };
 
 function getSkuFromProductItem(item) {
@@ -55,7 +54,7 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  olCart.removeChild(event.target);
+  event.target.remove();
   saveCart();
 }
 
@@ -96,7 +95,7 @@ const implementaSaveCart = async () => {
   olCart.innerHTML = getSavedCartItems();
 };
 
-// document.querySelector('ol.cart__items').addEventListener('click', cartItemClickListener);
+document.querySelector('ol.cart__items').addEventListener('click', cartItemClickListener);
 
 window.onload = async () => { 
   await resultadoProdutos();
